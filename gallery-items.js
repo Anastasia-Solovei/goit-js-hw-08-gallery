@@ -49,21 +49,21 @@ function onLightboxOpen(evt) {
   lightboxCloseButton.addEventListener('click', onLightboxClose);
   lightboxOverlay.addEventListener('click', onLightboxClose);
   window.addEventListener('keydown', onEscBtnPress);
-  // window.addEventListener('keydown', onArrowBtnPress);
+  window.addEventListener('keydown', onArrowBtnPress);
   lightbox.classList.add('is-open');
   lightboxImage.src = evt.target.dataset.source;
 
   const dataIndexOfCurrentGalleryImage = evt.target.dataset.index;
   lightboxImage.setAttribute('data-index', `${dataIndexOfCurrentGalleryImage}`);
 
-  // onArrowBtnPress(evt);
+  onArrowBtnPress(evt);
 }
 
 function onLightboxClose() {
   lightboxCloseButton.removeEventListener('click', onLightboxClose);
   lightboxOverlay.removeEventListener('click', onLightboxClose);
   window.removeEventListener('keydown', onEscBtnPress);
-  // window.removeEventListener('keydown', onArrowBtnPress);
+  window.removeEventListener('keydown', onArrowBtnPress);
   lightbox.classList.remove('is-open');
   lightboxImage.src = '';
 }
@@ -74,14 +74,27 @@ function onEscBtnPress(evt) {
   }
 }
 
-// function onArrowBtnPress(evt) {
-//   let indexOfCurrentLightboxImage;
+function onArrowBtnPress(evt) {
+  let indexOfCurrentLightboxImage;
 
-//   if (evt.code === 'ArrowRight') {
-//     indexOfCurrentLightboxImage = Number(lightboxImage.dataset.index) + 1;
-//   }
+  if (evt.code === 'ArrowRight') {
+    indexOfCurrentLightboxImage = Number(lightboxImage.dataset.index) + 1;
+    const lastIndexOfGallery = items.length - 1;
 
-//   if (evt.code === 'ArrowLeft') {
-//     indexOfCurrentLightboxImage = Number(lightboxImage.dataset.index) - 1;
-//   }
-// }
+    if (indexOfCurrentLightboxImage > lastIndexOfGallery) {
+      indexOfCurrentLightboxImage = lastIndexOfGallery;
+    }
+    lightboxImage.src = items[indexOfCurrentLightboxImage].original;
+    lightboxImage.setAttribute('data-index', indexOfCurrentLightboxImage);
+  }
+
+  if (evt.code === 'ArrowLeft') {
+    indexOfCurrentLightboxImage = Number(lightboxImage.dataset.index) - 1;
+
+    if (indexOfCurrentLightboxImage < 0) {
+      indexOfCurrentLightboxImage = 0;
+    }
+    lightboxImage.src = items[indexOfCurrentLightboxImage].original;
+    lightboxImage.setAttribute('data-index', indexOfCurrentLightboxImage);
+  }
+}
