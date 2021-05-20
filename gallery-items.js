@@ -56,7 +56,7 @@ function onLightboxOpen(evt) {
   const dataIndexOfCurrentGalleryImage = evt.target.dataset.index;
   lightboxImage.setAttribute('data-index', `${dataIndexOfCurrentGalleryImage}`);
 
-  onArrowBtnPress(evt);
+  // onArrowBtnPress(evt);
 }
 
 function onLightboxClose() {
