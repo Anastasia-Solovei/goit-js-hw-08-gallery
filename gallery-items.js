@@ -38,46 +38,52 @@ function createGalleryItemsMarkup(items) {
 function onGalleryImageClick(evt) {
   evt.preventDefault();
 
+  if (evt.target.nodeName !== 'IMG') {
+    return;
+  }
+
   onLightboxOpen(evt);
 }
 
 function onLightboxOpen(evt) {
-  const isGalleryImage = document.querySelector('img.gallery__image');
-  if (!isGalleryImage) {
-    return;
-  }
-
   lightboxCloseButton.addEventListener('click', onLightboxClose);
   lightboxOverlay.addEventListener('click', onLightboxClose);
-  window.addEventListener('keydown', onEscCodePress);
-  //   window.addEventListener('keydown', onArrowBtnPress);
+  window.addEventListener('keydown', onEscBtnPress);
+  window.addEventListener('keydown', onArrowBtnPress);
   lightbox.classList.add('is-open');
   lightboxImage.src = evt.target.dataset.source;
+
+  const dataIndexOfCurrentGalleryImage = evt.target.dataset.index;
+  console.log(dataIndexOfCurrentGalleryImage);
+  lightboxImage.setAttribute('data-index', `${dataIndexOfCurrentGalleryImage}`);
+  console.log(lightboxImage.dataset.index);
+
+  onArrowBtnPress(evt);
 }
 
 function onLightboxClose() {
   lightboxCloseButton.removeEventListener('click', onLightboxClose);
   lightboxOverlay.removeEventListener('click', onLightboxClose);
-  window.removeEventListener('keydown', onEscCodePress);
-  //   window.removeEventListener('keydown', onArrowBtnPress);
+  window.removeEventListener('keydown', onEscBtnPress);
+  window.removeEventListener('keydown', onArrowBtnPress);
   lightbox.classList.remove('is-open');
   lightboxImage.src = '';
 }
 
-function onEscCodePress(evt) {
+function onEscBtnPress(evt) {
   if (evt.code === 'Escape') {
     onLightboxClose();
   }
 }
 
-// function onArrowBtnPress(evt) {
-//   const galleryImage = document.querySelector('img.gallery__image');
+function onArrowBtnPress(evt) {
+  let indexOfCurrentLightboxImage;
 
-//   if (evt.code === 'ArrowRight') {
-//     lightboxImage.index = galleryImage.dataset.index + 1;
-//   } else if (evt.code === 'ArrowLeft') {
-//     lightboxImage.index = galleryImage.dataset.index - 1;
-//   } else {
-//     return;
-//   }
-// }
+  if (evt.code === 'ArrowRight') {
+    indexOfCurrentLightboxImage = Number(lightboxImage.dataset.index) + 1;
+  }
+
+  if (evt.code === 'ArrowLeft') {
+    indexOfCurrentLightboxImage = Number(lightboxImage.dataset.index) - 1;
+  }
+}
